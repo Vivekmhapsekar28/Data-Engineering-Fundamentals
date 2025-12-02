@@ -1,56 +1,95 @@
-# Data-Engineering-Fundamentals
+Data-Engineering-Fundamentals
 Assignments On Data Engineering
 
-# Data Engineering Assignment 01
+Data Engineering Assignment 01
 
-## 1. ETL vs ELT Tools
+🟦 01 — ETL & ELT Tools
 
-### ETL (Extract, Transform, Load)
-*Data is transformed on a secondary server before loading.*
-1. **Talend** - Open-source integration.
-2. **Apache NiFi** - Automated data flow/ingestion.
-3. **Informatica PowerCenter** - Enterprise-grade on-premise/hybrid tool.
+In Data Engineering, the difference between ETL and ELT lies in where the transformation happens.
 
-### ELT (Extract, Load, Transform)
-*Data is loaded raw; transformations happen inside the warehouse.*
-1. **dbt (data build tool)** - Runs SQL transformation inside warehouses.
-2. **Fivetran** - Automated connectors for SaaS to Warehouse.
-3. **Matillion** - Cloud-native solution for Snowflake/Redshift.
+ETL (Extract → Transform → Load):
+Data is transformed before loading into the data warehouse.
 
----
+ELT (Extract → Load → Transform):
+Raw data is loaded into the warehouse first, and transformations happen inside the warehouse using its compute power.
 
-## 2. Research Cloud Zones
+✅ 3 Common ETL Tools
+1. Talend
 
-**Definition:** "Zones" refers to **Availability Zones (AZs)**, which are physically separate data centers within a specific Region (e.g., `us-east-1a`).
+Popular open-source and enterprise ETL platform
 
-**Importance in Data Engineering:**
-* **High Availability:** Distributing pipelines across AZs ensures continuity if one data center fails.
-* **Latency:** Compute resources (like EC2) should be in the same AZ as storage to maximize speed.
-* **Cost:** Data transfer between AZs often incurs costs, unlike local transfer.
+Ideal for batch workflows and complex integrations
 
----
+2. Apache NiFi
 
-## 3. Source -> BI Flow Diagram
+Great for real-time data ingestion
 
-```mermaid
-flowchart LR
-    subgraph Sources
-    A[APIs / DBs / Files]
-    end
+Drag-and-drop UI for routing and transforming data flows
 
-    subgraph Ingestion
-    B[Staging / Data Lake]
-    end
+3. Informatica PowerCenter
 
-    subgraph Warehouse
-    C[(Data Warehouse)]
-    end
+Enterprise-grade ETL tool used in large organizations
 
-    subgraph BI
-    D[Dashboards / Reporting]
-    end
+Highly stable and reliable for on-premise and hybrid ETL workflows
 
-    A -- Extract --> B
-    B -- Load --> C
-    C -- Transform (dbt) --> C
-    C -- Serve --> D
+Note (as a Python Developer):
+Custom ETL using Python + Pandas + Airflow DAGs is also very common in modern data engineering.
+
+🟩 3 Common ELT Tools
+1. dbt (Data Build Tool)
+
+The industry standard for ELT
+
+Runs SQL transformations directly inside Snowflake, BigQuery, or Redshift
+
+Supports modular SQL, version control, and testing
+
+2. Fivetran
+
+Handles Extract + Load automatically from multiple SaaS sources
+
+Assumes transformations will happen later in the warehouse (with dbt or SQL)
+
+3. Matillion
+
+Cloud-native ELT platform
+
+Designed specifically for Snowflake, Redshift, and BigQuery
+
+Pushes SQL transformations directly down to the warehouse’s compute layer
+
+🟧 02 — Cloud Zones in Data Engineering
+
+Modern data lakes follow a multi-zone architecture to manage data quality, processing, and consumption.
+
+Below are the three main zones:
+
+1. Landing Zone (Raw Zone / Bronze Layer)
+
+Stores raw, unprocessed source data
+
+No schema enforcement
+
+Examples: API responses, CSV dumps, logs
+
+Used as a single source of truth for incoming data
+
+2. Processing Zone (Clean Zone / Silver Layer)
+
+Data is cleaned and validated
+
+Handles duplicates, missing values, and type conversions
+
+Standardizes data for downstream consumption
+
+Used mostly by Data Engineers
+
+3. Curated Zone (Analytics / Gold Layer)
+
+Final business-ready datasets
+
+Used for dashboards, reporting, and ML
+
+Aggregations, fact tables, and dimension tables live here
+
+Highly trusted and optimized
